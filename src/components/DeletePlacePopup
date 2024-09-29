@@ -1,0 +1,27 @@
+/* 
+import React from 'react';
+import PopupWithForm from './PopupWithForm'; 
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+
+
+function DeletePlacePopup() {
+    e.preventDefault();
+    onDeletePlaceSubmit({
+     ................... 
+   });
+ }
+}
+
+return(
+<PopupWithForm
+name="popup-delete-card"
+title="¿Estás seguro?"
+isOpen={isOpen}
+onClose={onClose}
+buttonText="Sí"
+onSubmit={handleSubmit} 
+>
+)
+
+
+export default DeletePlacePopup */
