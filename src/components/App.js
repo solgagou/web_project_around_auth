@@ -12,7 +12,10 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import { BrowserRouter, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import Register from './Register.js';
 import Login from './Login.js';
+import InfoTooltip from './InfoTooltip.js';
 //import InfoTooltip from './components/InfoTooltip.js';
+import ProtectedRoute from "./ProtectedRoute"; 
+
 
 
 
@@ -26,7 +29,7 @@ function App() {
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
   /*const [isDeletePlacePopup, setIsDeletePlacePopup] = React.useState(false);*/
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [isregistered, setIsRegistered] = React.useState(false);
+  const [isRegistered, setIsRegistered] = React.useState(false);
   const [isRegisteredUser, setIsRegisteredUser] = React.useState(false);
   const navigate = useNavigate();
   
@@ -164,8 +167,8 @@ function App() {
             <Route
               path="/"
               element={
-                isLoggedIn ? (
-                  <>
+                <ProtectedRoute isLoggedIn={isLoggedIn} element={
+                    <>
       <Header />
       <Main
         onEditAvatarClick={handleEditAvatarClick}
@@ -199,14 +202,15 @@ function App() {
           link={selectedCard.link} 
           isOpen={isImagePopupOpen}
           onClose={handleCloseAllPopups}
-        />     
-     
-      </>
-              ) : (
-                <Navigate to="/signin" />
-              )
-            }
-          />
+          />     
+      <InfoTooltip
+          isOpen={isTooltipOpen}
+          onClose={closeTooltip} 
+          isSuccess={registrationSuccess}/>
+                                </>
+                            } />
+                        }
+                    />
 
           <Route path="*" element={<Navigate to="/signin" />} />
         </Routes>
