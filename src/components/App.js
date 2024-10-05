@@ -1,14 +1,19 @@
-import './index.css';
-import Main from './components/Main.js'
-import Header from './components/Header.js'
-import Footer from './components/Footer.js'
+import '../index.css';
+import Main from './Main.js'
+import Header from './Header.js'
+import Footer from './Footer.js'
 import React from 'react';
-import ImagePopup from './components/ImagePopup.js';
-import api from './utils/api.js';
-import EditProfilePopup from './components/EditProfilePopup.js';
-import EditAvatarPopup from './components/EditAvatarPopup.js';
-import AddPlacePopup from './components/AddPlacePopup.js';
-import { CurrentUserContext } from './contexts/CurrentUserContext';
+import ImagePopup from './ImagePopup.js';
+import api from '../utils/api.js';
+import EditProfilePopup from './EditProfilePopup.js';
+import EditAvatarPopup from './EditAvatarPopup.js';
+import AddPlacePopup from './AddPlacePopup.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import { BrowserRouter, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import Register from './Register.js';
+import Login from './Login.js';
+//import InfoTooltip from './components/InfoTooltip.js';
+
 
 
 function App() {
@@ -20,7 +25,10 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
   /*const [isDeletePlacePopup, setIsDeletePlacePopup] = React.useState(false);*/
-
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isregistered, setIsRegistered] = React.useState(false);
+  const [isRegisteredUser, setIsRegisteredUser] = React.useState(false);
+  const navigate = useNavigate();
   
   React.useEffect(() => {
     api.getUserInfo() 
@@ -131,9 +139,33 @@ function App() {
         onAddPlaceSubmit={handleCardFinalRemove}
       />  */
 
+  function handleLoginClick() {
+    setIsLoggedIn(true);
+    console.log("Logging in...");
+  }
+
+  function handleRegisterClick() {
+    setIsRegistered(true);
+    console.log("Registering...");
+  }
+
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");  
+    }
+  }, [isLoggedIn, navigate]); 
+
  return (
   <CurrentUserContext.Provider value={{ currentUser, selectedCard }}>
-    <div className="page">
+      <div className="page">
+      <Routes>
+            <Route path="/signin" element={<Login navigate={navigate} onLoginClick={handleLoginClick} />} />
+            <Route path="/signup" element={<Register onRegisterClick={handleRegisterClick} />} />
+            <Route
+              path="/"
+              element={
+                isLoggedIn ? (
+                  <>
       <Header />
       <Main
         onEditAvatarClick={handleEditAvatarClick}
@@ -168,10 +200,20 @@ function App() {
           isOpen={isImagePopupOpen}
           onClose={handleCloseAllPopups}
         />     
-    </div>
-</CurrentUserContext.Provider>
-  );
+     
+      </>
+              ) : (
+                <Navigate to="/signin" />
+              )
+            }
+          />
 
+          <Route path="*" element={<Navigate to="/signin" />} />
+        </Routes>
+      </div>
+
+  </CurrentUserContext.Provider>
+);
 }
 
 
