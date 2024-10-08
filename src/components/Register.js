@@ -35,7 +35,7 @@ const Register = ({ onRegisterClick }) => {
                 }
             })
             .catch(err => {
-                setError("Error al registrarse: " + err.message);
+                setError("Error al registrarse: " + error.message);
             });
     };
 

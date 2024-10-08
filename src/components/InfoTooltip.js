@@ -3,7 +3,7 @@ import closeIcon from '../images/close_icon.png';
 import checkIcon from '../images/check.png';
 import crossImage from '../images/red_cross_icon.png';
 
-function InfoTooltip({isOpen, onClose}) {
+function InfoTooltip({isOpen, onClose, isSuccess}) {
 return (
     <div className={`popup ${isOpen ? 'popup_opened' : ''}`}>
     <div class="popup__register-content">

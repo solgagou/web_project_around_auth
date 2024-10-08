@@ -13,10 +13,8 @@ import { BrowserRouter, Route, Routes, Navigate, useNavigate } from 'react-route
 import Register from './Register.js';
 import Login from './Login.js';
 import InfoTooltip from './InfoTooltip.js';
-//import InfoTooltip from './components/InfoTooltip.js';
 import ProtectedRoute from "./ProtectedRoute"; 
-
-
+import { getUserProfile } from "../utils/auth.js";
 
 
 function App() {
@@ -31,7 +29,9 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
   const [isRegisteredUser, setIsRegisteredUser] = React.useState(false);
-  const navigate = useNavigate();
+  const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = React.useState(false);
+    const navigate = useNavigate();
   
   React.useEffect(() => {
     api.getUserInfo() 
@@ -73,6 +73,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsImagePopupOpen(false);
     /*setIsDeletePlacePopup*/
+    setIsTooltipOpen(false);
   };
 
   function handleUpdateUser(userData) {
@@ -158,6 +159,33 @@ function App() {
     }
   }, [isLoggedIn, navigate]); 
 
+  function handleRegisterClick(isSuccess) {
+    setIsTooltipOpen(true);  
+    setRegistrationSuccess(isSuccess); 
+  };
+
+  const checkAuth = () => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      getUserProfile(token)
+        .then((userData) => {
+          if (userData) {
+            // Si el usuario es válido, lo rediriges a su perfil
+            navigate("/users/me");
+          }
+        })
+        .catch((err) => {
+          console.error("Error verificando token:", err);
+        });
+    }
+  };
+
+  /* Llamar a checkAuth cuando se monte el componente
+  useEffect(() => {
+    checkAuth();
+  }, []);*/
+
+  
  return (
   <CurrentUserContext.Provider value={{ currentUser, selectedCard }}>
       <div className="page">
@@ -205,7 +233,7 @@ function App() {
           />     
       <InfoTooltip
           isOpen={isTooltipOpen}
-          onClose={closeTooltip} 
+          onClose={handleCloseAllPopups} 
           isSuccess={registrationSuccess}/>
                                 </>
                             } />
