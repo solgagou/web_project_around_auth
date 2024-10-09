@@ -3,8 +3,6 @@ import {  useNavigate } from 'react-router-dom';
 import logo from '../images/logo_around.png';
 import headerLine from '../images/line.jpg';
 import * as auth from "../utils/auth.js";
-//import { AppContext } from './AppContext.js';
-
 
 const Login = ({ handleLoginClick }) => {
   const [email, setEmail] = useState('');
@@ -28,9 +26,8 @@ const Login = ({ handleLoginClick }) => {
     auth.login(email, password)
       .then((data) => {
         if (data.token) {
-          localStorage.setItem('jwt', data.token); // Guardar el token en localStorage
+          localStorage.setItem('jwt', data.token); 
 
-          // Resetear los campos de email y contraseña
           setEmail('');
           setPassword('');
 
@@ -41,7 +38,6 @@ const Login = ({ handleLoginClick }) => {
       })
       .catch(err => console.error('Error al iniciar sesión:', err));
   };
-
 
    return (
         <>

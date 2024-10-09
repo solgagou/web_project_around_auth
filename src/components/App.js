@@ -16,6 +16,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import * as auth from "../utils/auth.js";
 
 const UserProfile = () => {
+  console.log("hola")
   const { currentUser } = React.useContext(CurrentUserContext);
 
   return (
@@ -35,7 +36,6 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
-  /*const [isDeletePlacePopup, setIsDeletePlacePopup] = React.useState(false);*/
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
   const [isRegisteredUser, setIsRegisteredUser] = React.useState(false);
@@ -81,6 +81,26 @@ function App() {
     fetchCards(); 
   }, []); 
 
+  function handleRegisterClick() {
+    setIsRegistered(true);
+    setIsTooltipOpen(true);  
+    setRegistrationSuccess(true);  
+    console.log("Registering...");
+  }
+
+  
+  function handleLoginClick() {
+    setIsLoggedIn(true);
+    console.log("Logging in...");
+    checkAuth();
+  }
+
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/users/me");  
+    }
+  }, [isLoggedIn, navigate]); 
+  
   function handleEditAvatarClick() {
       setIsEditAvatarPopupOpen(true);
   };
@@ -103,7 +123,6 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsImagePopupOpen(false);
-    /*setIsDeletePlacePopup*/
     setIsTooltipOpen(false);
   };
 
@@ -156,45 +175,7 @@ function App() {
       });
   }
 
-  /*function handleCardFinalRemove(card) {
-    api.removeCard(card._id)
-      .then(() => {
-       setCards(state => ......
-       })
-      .catch(err => {
-        console.error(`Error al eliminar la tarjeta: ${err}`);  
-       });
-   }*/
-
-       /*ESTO AL FINAL DEL CURRENT CONTEXT: 
-      <DeletePlacePopup
-        isOpen={isDeletePlacePopup}
-        onClose={handleCloseAllPopups}
-        onAddPlaceSubmit={handleCardFinalRemove}
-      />  */
-
-  function handleRegisterClick() {
-    setIsRegistered(true);
-    setIsTooltipOpen(true);  
-    setRegistrationSuccess(true);  
-    console.log("Registering...");
-  }
-
-  
-  function handleLoginClick() {
-    setIsLoggedIn(true);
-    console.log("Logging in...");
-    checkAuth();
-  }
-
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/users/me");  
-    }
-  }, [isLoggedIn, navigate]); 
- 
-  
- return (
+return (
   <CurrentUserContext.Provider value={{ currentUser, selectedCard }}>
       <div className="page">
       <Routes>
