@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import {  useNavigate } from 'react-router-dom';
 import logo from '../images/logo_around.png';
 import headerLine from '../images/line.jpg';
 import * as auth from "../utils/auth.js";
@@ -34,8 +34,7 @@ const Login = ({ handleLoginClick }) => {
           setEmail('');
           setPassword('');
 
-          handleLoginClick(); // Llamamos a la función que cambia el estado de isLoggedIn
-          navigate('/users/me'); // Navegamos al perfil del usuario
+          handleLoginClick(); 
         } else {
           console.error('No se recibió el token en la respuesta');
         }
@@ -52,14 +51,14 @@ const Login = ({ handleLoginClick }) => {
               <img src={logo} className="header__logo" alt="Around logo" />
               <button 
               className="header__register-link" 
-              onClick={() => this.props.navigate('/signup')}
+              onClick={() => navigate('/signup')}
             >Regístrate</button>
             </div>
             <img src={headerLine} className="header__line" alt="a line" />
           </header>
           <main className="login__main">
             <h1 className="login__title">Inicia sesión</h1>
-            <form className="login__form" onSubmit={this.handleSubmit}>
+            <form className="login__form" onSubmit={handleSubmit}>
               <input
                 className="form form__input"
                 type="email"
@@ -69,8 +68,8 @@ const Login = ({ handleLoginClick }) => {
                 minLength="5"
                 maxLength="50"
                 name="email"
-                value={this.state.email}
-                onChange={this.handleChange}
+                value={email}
+                onChange={handleChange}
               />
               <span className="form__input-error input-name-error"></span>
               <input
@@ -82,13 +81,13 @@ const Login = ({ handleLoginClick }) => {
                  minLength="20"
                  maxLength="64"
                  name="password"
-                 value={this.state.password}
-                 onChange={this.handleChange}
+                 value={password}
+                 onChange={handleChange}
               />
                <span className="form__input-error input-job-error"></span>
                <div className="login__footer">
-                 <button className="login__button" onClick={this.handleSubmit} type="submit">Inicia sesión</button>
-                 <button className="footer__register-link" onClick={() => this.props.navigate('/signup')}> ¿Aún no eres miembro? Regístrate aquí</button>
+                 <button className="login__button" onClick={handleSubmit} type="submit">Inicia sesión</button>
+                 <button className="footer__register-link" onClick={() => navigate('/signup')}> ¿Aún no eres miembro? Regístrate aquí</button>
                </div>
             </form>
           </main>

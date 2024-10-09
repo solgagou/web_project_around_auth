@@ -15,6 +15,17 @@ import InfoTooltip from './InfoTooltip.js';
 import ProtectedRoute from "./ProtectedRoute"; 
 import * as auth from "../utils/auth.js";
 
+const UserProfile = () => {
+  const { currentUser } = React.useContext(CurrentUserContext);
+
+  return (
+    <div>
+      <h1>{currentUser.name}</h1>
+      <p>{currentUser.about}</p>
+      <img src={currentUser.avatar} alt="Avatar" />
+    </div>
+  );
+};
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({name: '', about:'', avatar:'' });
@@ -32,21 +43,23 @@ function App() {
   const [registrationSuccess, setRegistrationSuccess] = React.useState(false);
   const navigate = useNavigate();
   
-  const checkAuth = () => {
+
+  const checkAuth = async () => {
     const token = localStorage.getItem("jwt");
     if (token) {
-      auth.getUserProfile(token)
-        .then((userData) => {
-          if (userData) {
-            setCurrentUser(userData);
-            navigate("/users/me"); 
+      try { 
+        const userData = await auth.getUserProfile(token);
+        if (userData) {
+          setCurrentUser(userData);
+          navigate("/users/me"); 
           }
-        })
-        .catch((err) => {
+        } catch (err) {
           console.error("Error verificando token:", err);
-        });
+          setIsLoggedIn(false);
+        }
     } else {
       console.error('No se encontró el token de autenticación');
+      setIsLoggedIn(false);
     }
   };
 
@@ -56,11 +69,17 @@ function App() {
 
     
   React.useEffect(() => {
-    auth.getInitialCards() 
-      .then(cardsData => {
-       setCards(cardsData);  
-      })
-  }, []);  
+    const fetchCards = async () => {
+      try {
+        const cardsData = await auth.getInitialCards() 
+        setCards(cardsData);  
+      } catch (err) {
+        console.error("Error al cargar las tarjetas:", err);
+      }
+    };
+  
+    fetchCards(); 
+  }, []); 
 
   function handleEditAvatarClick() {
       setIsEditAvatarPopupOpen(true);
@@ -88,18 +107,17 @@ function App() {
     setIsTooltipOpen(false);
   };
 
-  function handleUpdateUser(userData) {
-   auth.setUserInfo(userData)
-    .then((updatedUser) => {
+  async function handleUpdateUser(userData) {
+    try {
+      const updatedUser = await auth.setUserInfo(userData)
       setCurrentUser(updatedUser);
       handleCloseAllPopups();
-    })
-    .catch((err) => {
+    } catch(err) {
       console.error(`Error al actualizar el perfil: ${err}`);
-    });
+    }
   }
   
-  function handleUpdateAvatar (avatar) {
+  function handleUpdateAvatar(avatar) {
     auth.setUserAvatar({avatar})
     .then((updatedUser) => {
       setCurrentUser(updatedUser);
@@ -166,6 +184,7 @@ function App() {
   function handleLoginClick() {
     setIsLoggedIn(true);
     console.log("Logging in...");
+    checkAuth();
   }
 
   React.useEffect(() => {
@@ -181,6 +200,9 @@ function App() {
       <Routes>
             <Route path="/signin" element={<Login navigate={navigate} handleLoginClick={handleLoginClick} />} />
             <Route path="/signup" element={<Register onRegisterClick={handleRegisterClick} />} />
+            <Route path="/users/me" element={
+          <ProtectedRoute isLoggedIn={isLoggedIn} element={<UserProfile />} />
+          } />
             <Route
               path="/"
               element={
