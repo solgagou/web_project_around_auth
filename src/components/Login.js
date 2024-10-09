@@ -1,52 +1,50 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../images/logo_around.png';
 import headerLine from '../images/line.jpg';
 import * as auth from "../utils/auth.js";
 //import { AppContext } from './AppContext.js';
 
 
-class Login extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        email: "",
-        password: "",
-      };
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
-    }
-    handleChange(e) {
-      const { name, value } = e.target;
-      this.setState({
-        [name]: value,
-      });
-    }
-    handleSubmit(e) {
-      e.preventDefault();
-      if (!this.state.email || !this.state.password) {
-        return;
-      }
+const Login = ({ handleLoginClick }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'email') setEmail(value);
+    if (name === 'password') setPassword(value);
+  };
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      return;
+    }
       
-    auth.login(this.state.email, this.state.password)
-    .then((data) => {
-      if (data.jwt) {
-        this.setState({
-          email: '',
-          password: ''
-        }, () => {
-          this.props.handleLogin();
-          this.props.navigate('/users/me');
-        })
-      }
-    })
-    .catch(err => console.log(
-    err));
-    }
+    auth.login(email, password)
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem('jwt', data.token); // Guardar el token en localStorage
 
-   render() {
-      return (
+          // Resetear los campos de email y contraseña
+          setEmail('');
+          setPassword('');
+
+          handleLoginClick(); // Llamamos a la función que cambia el estado de isLoggedIn
+          navigate('/users/me'); // Navegamos al perfil del usuario
+        } else {
+          console.error('No se recibió el token en la respuesta');
+        }
+      })
+      .catch(err => console.error('Error al iniciar sesión:', err));
+  };
+
+
+   return (
         <>
         <div className= "login">
           <header className="login__header">
@@ -98,6 +96,6 @@ class Login extends React.Component {
         </>
       );
     }
-  }
+  
   
   export default Login;

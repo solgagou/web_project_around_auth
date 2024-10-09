@@ -4,7 +4,6 @@ import Header from './Header.js'
 import Footer from './Footer.js'
 import React from 'react';
 import ImagePopup from './ImagePopup.js';
-import api from '../utils/api.js';
 import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
@@ -14,7 +13,7 @@ import Register from './Register.js';
 import Login from './Login.js';
 import InfoTooltip from './InfoTooltip.js';
 import ProtectedRoute from "./ProtectedRoute"; 
-import { getUserProfile } from "../utils/auth.js";
+import * as auth from "../utils/auth.js";
 
 
 function App() {
@@ -31,20 +30,33 @@ function App() {
   const [isRegisteredUser, setIsRegisteredUser] = React.useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
   const [registrationSuccess, setRegistrationSuccess] = React.useState(false);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   
-  React.useEffect(() => {
-    api.getUserInfo() 
-     .then(userData => {
-      setCurrentUser(userData);
-    })
-      .catch(err => {
-        console.error('Error al obtener los datos del usuario:', err);
-      });
-  }, []); 
+  const checkAuth = () => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      auth.getUserProfile(token)
+        .then((userData) => {
+          if (userData) {
+            setCurrentUser(userData);
+            navigate("/users/me"); 
+          }
+        })
+        .catch((err) => {
+          console.error("Error verificando token:", err);
+        });
+    } else {
+      console.error('No se encontró el token de autenticación');
+    }
+  };
 
+    React.useEffect(() => {
+      checkAuth();  
+    }, []);
+
+    
   React.useEffect(() => {
-    api.getInitialCards() 
+    auth.getInitialCards() 
       .then(cardsData => {
        setCards(cardsData);  
       })
@@ -77,7 +89,7 @@ function App() {
   };
 
   function handleUpdateUser(userData) {
-   api.setUserInfo(userData)
+   auth.setUserInfo(userData)
     .then((updatedUser) => {
       setCurrentUser(updatedUser);
       handleCloseAllPopups();
@@ -88,7 +100,7 @@ function App() {
   }
   
   function handleUpdateAvatar (avatar) {
-    api.setUserAvatar({avatar})
+    auth.setUserAvatar({avatar})
     .then((updatedUser) => {
       setCurrentUser(updatedUser);
       handleCloseAllPopups();
@@ -99,7 +111,7 @@ function App() {
   }
 
   function handleAddPlaceSubmit(card) {
-    api.addPlace(card)
+    auth.addPlace(card)
     .then((newCard) => {
       setCards([newCard, ...cards]);
       handleCloseAllPopups();
@@ -112,12 +124,12 @@ function App() {
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     
-    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+    auth.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
     });
 }
   function handleCardDelete(card) {
-   api.deleteCard(card._id)
+   auth.deleteCard(card._id)
      .then(() => {
       setCards(state => state.filter(c => c._id !== card._id));
       })
@@ -143,54 +155,31 @@ function App() {
         onAddPlaceSubmit={handleCardFinalRemove}
       />  */
 
+  function handleRegisterClick() {
+    setIsRegistered(true);
+    setIsTooltipOpen(true);  
+    setRegistrationSuccess(true);  
+    console.log("Registering...");
+  }
+
+  
   function handleLoginClick() {
     setIsLoggedIn(true);
     console.log("Logging in...");
   }
 
-  function handleRegisterClick() {
-    setIsRegistered(true);
-    console.log("Registering...");
-  }
-
   React.useEffect(() => {
     if (isLoggedIn) {
-      navigate("/");  
+      navigate("/users/me");  
     }
   }, [isLoggedIn, navigate]); 
-
-  function handleRegisterClick(isSuccess) {
-    setIsTooltipOpen(true);  
-    setRegistrationSuccess(isSuccess); 
-  };
-
-  const checkAuth = () => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      getUserProfile(token)
-        .then((userData) => {
-          if (userData) {
-            // Si el usuario es válido, lo rediriges a su perfil
-            navigate("/users/me");
-          }
-        })
-        .catch((err) => {
-          console.error("Error verificando token:", err);
-        });
-    }
-  };
-
-  /* Llamar a checkAuth cuando se monte el componente
-  useEffect(() => {
-    checkAuth();
-  }, []);*/
-
+ 
   
  return (
   <CurrentUserContext.Provider value={{ currentUser, selectedCard }}>
       <div className="page">
       <Routes>
-            <Route path="/signin" element={<Login navigate={navigate} onLoginClick={handleLoginClick} />} />
+            <Route path="/signin" element={<Login navigate={navigate} handleLoginClick={handleLoginClick} />} />
             <Route path="/signup" element={<Register onRegisterClick={handleRegisterClick} />} />
             <Route
               path="/"
