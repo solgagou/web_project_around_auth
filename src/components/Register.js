@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../images/logo_around.png';
-import headerLine from '../images/line.jpg';
 import * as auth from "../utils/auth.js";
 
 const Register = ({ onRegisterClick }) => {
@@ -42,13 +40,7 @@ const Register = ({ onRegisterClick }) => {
     return (
         <>
             <div className="register">
-                <header className="register__header">
-                    <div className="register__header-info">
-                        <img src={logo} className="header__logo" alt="Around logo" />
-                        <Link to="login" className="header__login-link">Iniciar sesión</Link>
-                    </div>
-                    <img src={headerLine} className="header__line" alt="a line" />
-                </header>
+                
                 <main className="register__main">
                     <h1 className="register__title">Regístrate</h1>
                     <form className="register__form" onSubmit={(e) => { handleSubmit(e); onRegisterClick(); }}>

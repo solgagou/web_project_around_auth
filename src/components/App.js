@@ -8,7 +8,7 @@ import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
-import { BrowserRouter, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import Register from './Register.js';
 import Login from './Login.js';
 import InfoTooltip from './InfoTooltip.js';
@@ -16,7 +16,6 @@ import ProtectedRoute from "./ProtectedRoute";
 import * as auth from "../utils/auth.js";
 
 const UserProfile = () => {
-  console.log("hola")
   const { currentUser } = React.useContext(CurrentUserContext);
 
   return (
@@ -51,6 +50,7 @@ function App() {
         const userData = await auth.getUserProfile(token);
         if (userData) {
           setCurrentUser(userData);
+          setIsLoggedIn(true);
           navigate("/users/me"); 
           }
         } catch (err) {
@@ -89,7 +89,7 @@ function App() {
   }
 
   
-  function handleLoginClick() {
+  async function handleLoginClick() {
     setIsLoggedIn(true);
     console.log("Logging in...");
     checkAuth();
@@ -98,6 +98,8 @@ function App() {
   React.useEffect(() => {
     if (isLoggedIn) {
       navigate("/users/me");  
+    } else {
+      navigate('/signin');
     }
   }, [isLoggedIn, navigate]); 
   
@@ -178,18 +180,18 @@ function App() {
 return (
   <CurrentUserContext.Provider value={{ currentUser, selectedCard }}>
       <div className="page">
+      <Header />
       <Routes>
             <Route path="/signin" element={<Login navigate={navigate} handleLoginClick={handleLoginClick} />} />
             <Route path="/signup" element={<Register onRegisterClick={handleRegisterClick} />} />
             <Route path="/users/me" element={
-          <ProtectedRoute isLoggedIn={isLoggedIn} element={<UserProfile />} />
+            <ProtectedRoute isLoggedIn={isLoggedIn} element={<UserProfile />} />
           } />
             <Route
               path="/"
               element={
                 <ProtectedRoute isLoggedIn={isLoggedIn} element={
                     <>
-      <Header />
       <Main
         onEditAvatarClick={handleEditAvatarClick}
         onEditProfileClick={handleEditProfileClick}

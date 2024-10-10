@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import {  useNavigate } from 'react-router-dom';
-import logo from '../images/logo_around.png';
-import headerLine from '../images/line.jpg';
 import * as auth from "../utils/auth.js";
 
 const Login = ({ handleLoginClick }) => {
@@ -42,16 +40,7 @@ const Login = ({ handleLoginClick }) => {
    return (
         <>
         <div className= "login">
-          <header className="login__header">
-            <div className="login__header-info">
-              <img src={logo} className="header__logo" alt="Around logo" />
-              <button 
-              className="header__register-link" 
-              onClick={() => navigate('/signup')}
-            >Regístrate</button>
-            </div>
-            <img src={headerLine} className="header__line" alt="a line" />
-          </header>
+          
           <main className="login__main">
             <h1 className="login__title">Inicia sesión</h1>
             <form className="login__form" onSubmit={handleSubmit}>
