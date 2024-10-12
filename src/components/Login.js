@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as auth from "../utils/auth.js";
 
 const Login = ({ handleLoginClick }) => {
@@ -20,6 +20,8 @@ const Login = ({ handleLoginClick }) => {
     if (!email || !password) {
       return;
     }
+
+    handleLoginClick(email, password);
       
     auth.login(email, password)
       .then((data) => {
@@ -40,10 +42,8 @@ const Login = ({ handleLoginClick }) => {
    return (
         <>
         <div className= "login">
-          
-          <main className="login__main">
-            <h1 className="login__title">Inicia sesión</h1>
-            <form className="login__form" onSubmit={handleSubmit}>
+          <h1 className="login__title">Inicia sesión</h1>
+          <form className="login__form" onSubmit={handleSubmit}>
               <input
                 className="form form__input"
                 type="email"
@@ -63,20 +63,19 @@ const Login = ({ handleLoginClick }) => {
                  id="input-password"
                  required
                  placeholder="Contraseña"
-                 minLength="20"
-                 maxLength="64"
+                 minLength="8"
+                 maxLength="30"
                  name="password"
                  value={password}
                  onChange={handleChange}
               />
                <span className="form__input-error input-job-error"></span>
-               <div className="login__footer">
-                 <button className="login__button" onClick={handleSubmit} type="submit">Inicia sesión</button>
-                 <button className="footer__register-link" onClick={() => navigate('/signup')}> ¿Aún no eres miembro? Regístrate aquí</button>
+            <div className="login__footer">
+                 <button className="login__button" type="submit">Inicia sesión</button>
+                 <button className="footer__register-link" type="button" onClick={() => navigate('/signup')}> ¿Aún no eres miembro? Regístrate aquí</button>
                </div>
             </form>
-          </main>
-          </div> 
+            </div> 
         </>
       );
     }

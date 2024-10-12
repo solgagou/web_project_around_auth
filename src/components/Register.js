@@ -6,7 +6,6 @@ const Register = ({ onRegisterClick }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -26,10 +25,11 @@ const Register = ({ onRegisterClick }) => {
         auth.register(email, password)
             .then((res) => {
                 if (res) {
-                    setMessage("");
+                    setError("");
+                    onRegisterClick(); 
                     navigate("/signin");
                 } else {
-                    setMessage("¡Algo salió mal!");
+                    setError("¡Algo salió mal!");
                 }
             })
             .catch(err => {

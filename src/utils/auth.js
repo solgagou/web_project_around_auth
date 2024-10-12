@@ -11,7 +11,9 @@ export const login = (email, password) => {
   })
     .then((response) => {
       if (!response.ok) {
+        return response.json().then((err) => {
         throw new Error("Error en el inicio de sesión");
+      });
       }
       return response.json();
     })
@@ -37,13 +39,20 @@ export const login = (email, password) => {
       },
       body: JSON.stringify({ email, password }),
     })
-      .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((err) => {
+          throw new Error(err.message || "Error en el registro");
+        });
+      }
+      return response.json();
+    })
       .then((data) => {
-        if (data.jwt) {
-          localStorage.setItem("jwt", data.jwt); 
+        if (data.token) {
+          localStorage.setItem("jwt", data.token); 
           return data;
         } else {
-          return;
+          throw new Error("Token no recibido");
         }
       })
       .catch((err) => console.log(err));
@@ -81,13 +90,16 @@ export const login = (email, password) => {
         about: data.about,
       }),
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Error: ${res.status}`);
-      });
-  };
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`Error: ${res.status}`);
+      }
+      return res.json();
+    })
+    .catch((err) => {
+      console.error("Error actualizando la información del usuario:", err);
+    });
+};
 
   export const setUserAvatar = (data) => {
     const token = localStorage.getItem("jwt");
@@ -101,13 +113,16 @@ export const login = (email, password) => {
         avatar: data.avatar,
       }),
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Error: ${res.status}`);
-      });
-  };
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`Error: ${res.status}`);
+      }
+      return res.json();
+    })
+    .catch((err) => {
+      console.error("Error actualizando el avatar:", err);
+    });
+};
 
   export const getInitialCards = () => {
     const token = localStorage.getItem("jwt");

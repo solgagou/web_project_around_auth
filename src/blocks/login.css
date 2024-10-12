@@ -2,45 +2,9 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-}
-
-.login__header {
-    background-color: #000;
-    margin-top: 45px;
-}
-
-.login__header-info {
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between;
-    margin: auto 320px;
-   
-   
-}
-
-.header__logo {
-    width: 173px;
-    height: 33px;
-    color: #fff;
-    
-}
-
-.header__register-link {
-    font-family: Inter;
-    font-size: 18px;
-    font-weight: 400;
-    color: #FFFFFF;
-    background: none;        
-    border: none; 
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.login__main {
-    display: flex;
-    flex-direction: column;
     align-items: center;
 }
+
 
 .login__title {
     font-family: Inter;
@@ -48,7 +12,7 @@
     font-weight: 900;
     line-height: 29px;
     color: #FFFFFF; 
-    margin-top: 60px;
+    margin-top: 110px;
 }
 
 .login__form {

@@ -1,10 +1,13 @@
 .profile {
-  margin: auto;
-}
+    align-items: center;
+    margin: 46px 200px auto 200px;
+    
+  }
 
 .profile__header {
   display: flex;
-  margin: auto auto 50px auto;
+  justify-content: space-between;
+  margin: 50px auto 50px auto;
 }
 
 .profile__photo {

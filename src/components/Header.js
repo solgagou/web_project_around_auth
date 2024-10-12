@@ -5,7 +5,7 @@ import logo from '../images/logo_around.png'
 import headerLine from '../images/line.jpg'
 
 
-function Header() {
+function Header({ handleLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { currentUser } = useContext(CurrentUserContext);
@@ -31,7 +31,7 @@ function Header() {
           <p className="header__user-email">{currentUser?.email}</p> 
           <button
           className="logout__button"
-          onClick={() => navigate('/signin')}
+          onClick={handleLogout} 
         >Cerrar sesión</button>
         </div>
       );                
@@ -40,7 +40,7 @@ function Header() {
   return (
   <header className="header">
     <img src={logo} className="header__logo" alt="Around logo" />
-    {sessionState && <div className="header__session-state">{sessionState}</div>}
+    {sessionState}
     <img src={headerLine} className="header__line" alt="a line" />
   </header>
   );

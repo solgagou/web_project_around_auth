@@ -1,10 +1,10 @@
 import editIcon from '../images/avatar_edit_icon.png';
 import React from 'react';
 import Card from './Card.js';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 
-function Main(props) {
+function Profile(props) {
   const { currentUser } = React.useContext(CurrentUserContext);
   
   
@@ -45,4 +45,4 @@ return (
  );
 }
 
-export default Main;
+export default Profile;
