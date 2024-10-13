@@ -1,7 +1,7 @@
   import '../index.css';
   import Profile from './Profile.js'
   import Header from './Header.js'
-  import Card from './Card';
+  //import Card from './Card';
   import Footer from './Footer.js'
   import React from 'react';
   import ImagePopup from './ImagePopup.js';
@@ -16,7 +16,7 @@
   import ProtectedRoute from "./ProtectedRoute"; 
   import * as auth from "../utils/auth.js";
 
-  const UserProfile = () => {
+  /*const UserProfile = () => {
     const { currentUser } = React.useContext(CurrentUserContext);
 
     return (
@@ -26,7 +26,7 @@
         <img src={currentUser.avatar} alt="Avatar" />
       </div>
     );
-  };
+  };*/
 
   function App() {
     const [currentUser, setCurrentUser] = React.useState({name: '', about:'', avatar:'' });
@@ -37,8 +37,8 @@
     const [selectedCard, setSelectedCard] = React.useState({});
     const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-    const [isRegistered, setIsRegistered] = React.useState(false);
-    const [isRegisteredUser, setIsRegisteredUser] = React.useState(false);
+    //const [isRegistered, setIsRegistered] = React.useState(false);
+    //const [isRegisteredUser, setIsRegisteredUser] = React.useState(false);
     const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
     const [registrationSuccess, setRegistrationSuccess] = React.useState(false);
     const navigate = useNavigate();
@@ -83,11 +83,10 @@
       checkAuth();
     }
 
-    function handleRegisterClick() {
-      setIsRegistered(true);
+    function handleRegisterClick(isSuccess) {
+      setRegistrationSuccess(isSuccess);  
       setIsTooltipOpen(true);  
-      setRegistrationSuccess(true);  
-      console.log("Registering...");
+      console.log(isSuccess ? "Registro exitoso" : "Registro fallido");
     }
 
     React.useEffect(() => {
@@ -121,11 +120,14 @@
     }
 
     function handleCloseAllPopups() {
+      console.log("Cerrando todos los popups");
       setIsEditAvatarPopupOpen(false);
       setIsEditProfilePopupOpen(false);
       setIsAddPlacePopupOpen(false);
       setIsImagePopupOpen(false);
       setIsTooltipOpen(false);
+      setRegistrationSuccess(false);
+
     };
 
     async function handleUpdateUser(userData) {
@@ -178,11 +180,11 @@
     }
 
     function handleLogout() {
-      localStorage.removeItem('jwt'); // Elimina el token
-      setIsLoggedIn(false); // Actualiza el estado de inicio de sesión
-      navigate('/signin'); // Navega a la página de inicio de sesión
+      localStorage.removeItem('jwt'); 
+      setIsLoggedIn(false); 
+      navigate('/signin'); 
     }
-
+    console.log("Renderizando InfoTooltip:", isTooltipOpen);
   return (
     <CurrentUserContext.Provider value={{ currentUser, selectedCard }}>
         <div className="page">

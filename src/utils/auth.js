@@ -47,16 +47,14 @@ export const login = (email, password) => {
       }
       return response.json();
     })
-      .then((data) => {
-        if (data.token) {
-          localStorage.setItem("jwt", data.token); 
-          return data;
-        } else {
-          throw new Error("Token no recibido");
-        }
-      })
-      .catch((err) => console.log(err));
-  };
+    .then((data) => {
+      return data; 
+  })
+  .catch((err) => {
+      console.error(err);
+      throw err; 
+  });
+};
 
   export const getUserProfile = (token) => {
     return fetch(`${BASE_URL}/users/me`, {

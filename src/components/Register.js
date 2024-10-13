@@ -23,17 +23,16 @@ const Register = ({ onRegisterClick }) => {
         }
 
         auth.register(email, password)
-            .then((res) => {
-                if (res) {
+            .then(() => {
                     setError("");
-                    onRegisterClick(); 
+                    console.log("Llamando a onRegisterClick con true");
+                    onRegisterClick(true); 
                     navigate("/signin");
-                } else {
-                    setError("¡Algo salió mal!");
-                }
             })
             .catch(err => {
-                setError("Error al registrarse: " + error.message);
+                setError("Error al registrarse: " + err.message);
+                console.log("Llamando a onRegisterClick con false");
+                onRegisterClick(false);
             });
     };
 
@@ -43,7 +42,7 @@ const Register = ({ onRegisterClick }) => {
                 
                 <main className="register__main">
                     <h1 className="register__title">Regístrate</h1>
-                    <form className="register__form" onSubmit={(e) => { handleSubmit(e); onRegisterClick(); }}>
+                    <form className="register__form" onSubmit={handleSubmit}>
                         <input
                             className="form form__input"
                             type="email"
