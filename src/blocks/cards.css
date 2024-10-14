@@ -32,7 +32,8 @@
 
 .card__info {
   display: flex;
-  flex-direction: row;
+  /*flex-direction: row;*/
+
 }
 
 .card__delete-button {
@@ -66,14 +67,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  margin: 15px auto auto 21px;
+  margin: auto auto auto 21px;
 }
 
 .card-like-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 15px 18px auto auto;
+  margin: auto 18px auto auto;
 }
 
 .card__like-button {
