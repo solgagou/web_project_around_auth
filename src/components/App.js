@@ -120,7 +120,6 @@
     }
 
     function handleCloseAllPopups() {
-      console.log("Cerrando todos los popups");
       setIsEditAvatarPopupOpen(false);
       setIsEditProfilePopupOpen(false);
       setIsAddPlacePopupOpen(false);
@@ -158,7 +157,7 @@
         handleCloseAllPopups();
       })
       .catch((err) => {
-        console.error(`Error al actualizar el perfil: ${err}`);
+        console.error(`Error al agregar la tarjeta: ${err}`);
       });
     }
 
@@ -184,7 +183,7 @@
       setIsLoggedIn(false); 
       navigate('/signin'); 
     }
-    console.log("Renderizando InfoTooltip:", isTooltipOpen);
+    
   return (
     <CurrentUserContext.Provider value={{ currentUser, selectedCard }}>
         <div className="page">

@@ -135,6 +135,10 @@ export const login = (email, password) => {
           return res.json();
         }
         return Promise.reject(`Error: ${res.status}`);
+      })
+      .then((cards) => {
+        // Ordenado por _id (inform de tiempo) porque con createdAt no se puede, ya que no controlo el backend
+        return cards.sort((a, b) => b._id.localeCompare(a._id));
       });
   };
 

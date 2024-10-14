@@ -4,7 +4,7 @@ import checkIcon from '../images/check.png';
 import crossImage from '../images/red_cross_icon.png';
 
 function InfoTooltip({ isOpen, onClose, isSuccess }) {
-  console.log("InfoTooltip - isOpen:", isOpen); 
+  //console.log("InfoTooltip - isOpen:", isOpen); 
 return (
     <div className={`popup ${isOpen ? 'popup_opened' : ''}`}>
     <div className="popup__register-content">

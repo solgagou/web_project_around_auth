@@ -25,13 +25,13 @@ const Register = ({ onRegisterClick }) => {
         auth.register(email, password)
             .then(() => {
                     setError("");
-                    console.log("Llamando a onRegisterClick con true");
+                    //console.log("Llamando a onRegisterClick con true");
                     onRegisterClick(true); 
                     navigate("/signin");
             })
             .catch(err => {
                 setError("Error al registrarse: " + err.message);
-                console.log("Llamando a onRegisterClick con false");
+                //console.log("Llamando a onRegisterClick con false");
                 onRegisterClick(false);
             });
     };
