@@ -27,7 +27,7 @@ function PopupWithForm(props) {
             document.removeEventListener('keydown', closeOnEscape);
             document.removeEventListener('mousedown', closeOnClickOutside);
         };
-    }, [isOpen, props.onClose]);
+    }, [isOpen, onClose]);
 
     return (
         <div className={`popup popup_type_${props.name} ${props.isOpen ? 'popup_opened' : ''}`}>
