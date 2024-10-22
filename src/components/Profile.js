@@ -14,10 +14,10 @@ return (
     <div className="profile__photo">
       <img
       src={currentUser.avatar} 
-      alt="a photo of Jack Cousteau with a red hat"
+      alt="Jack Cousteau with a red hat"
       className="profile__photo profile__avatar"
       />
-      <img src={editIcon} className="profile__avatar-edit-icon" onClick={props.onEditAvatarClick} />
+      <img src={editIcon} className="profile__avatar-edit-icon" alt= "an edit icon" onClick={props.onEditAvatarClick} />
     </div>
     <div className="profile__data">
       <h1 className="profile__name">{currentUser.name}</h1>
